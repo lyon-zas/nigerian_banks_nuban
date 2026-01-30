@@ -1,13 +1,14 @@
 // ignore_for_file: avoid_print
 
 import 'package:nigerian_banks_nuban/nigerian_banks_nuban.dart';
+import 'package:nigerian_banks_nuban/src/data/banks_data.dart' show banks;
 
 void main() {
   // Initialize the NigerianBanks instance
   final nigerianBanks = NigerianBanks();
 
   // 1. Get all banks
-  print('Total banks: ${nigerianBanks.banks.length}');
+  print('Total banks: ${banks.length}');
 
   // 2. Get bank by code
   final accessBank = nigerianBanks.getBankByCode('044');

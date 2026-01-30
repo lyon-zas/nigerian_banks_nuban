@@ -1,3 +1,7 @@
+## 0.0.4
+
+* Fixed LICENSE file to include full MIT license text (OSI-approved).
+
 ## 0.0.3
 
 * Added `findBankByName()` for fuzzy bank matching by name.

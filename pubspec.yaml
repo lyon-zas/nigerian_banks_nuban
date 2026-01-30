@@ -1,6 +1,6 @@
 name: nigerian_banks_nuban
 description: "A Flutter package to list Nigerian banks and detect probable banks from NUBAN account numbers. Includes offline assets."
-version: 0.0.3
+version: 0.0.4
 environment:
   sdk: ^3.8.1
   flutter: ">=1.17.0"
