@@ -7,7 +7,10 @@ A Flutter package that lists all Nigerian banks, their logos, and slugs, and pro
 - **Get All Banks**: Retrieve a list of all commercial and microfinance banks in Nigeria.
 - **Search by Slug/Code**: Find specific banks using their unique slug or CBN code.
 - **NUBAN Lookup**: Detect probable banks for a given 10-digit account number using the NUBAN algorithm.
-- **Off-line Assets**: All bank logos are bundled with the package, requiring no internet connection to display.
+- **Fuzzy Matching**: Find banks by name with variations (e.g., "MONIE POINT" → "Moniepoint MFB").
+- **Search**: Search banks by partial name, slug, or code.
+- **BankLogo Widget**: Ready-to-use widget with fallback handling for missing logos.
+- **Offline Assets**: All bank logos are bundled with the package.
 
 ## Installation
 
@@ -65,6 +68,46 @@ if (probableBanks.isEmpty) {
     print('Detected: ${bank.name}');
   }
 }
+```
+
+### Fuzzy Bank Matching
+
+Find banks by name, handling variations like "MONIE POINT" vs "Moniepoint MFB":
+
+```dart
+final bank = nigerianBanks.findBankByName('MONIEPOINT');
+// Returns Moniepoint MFB bank
+```
+
+### Search Banks
+
+Search across names, slugs, and codes:
+
+```dart
+final results = nigerianBanks.searchBanks('access');
+// Returns all banks containing "access"
+```
+
+### Normalized Name Comparison
+
+Compare bank names from different sources:
+
+```dart
+final normalized = NigerianBanks.normalizeName('Access Bank PLC');
+// Returns: "access"
+```
+
+### Display Bank Logo
+
+Use the `BankLogo` widget with built-in error handling:
+
+```dart
+BankLogo(
+  bank: bank,
+  size: 48,
+  borderRadius: 8,
+  fallback: Icon(Icons.account_balance), // Optional custom fallback
+)
 ```
 
 ## Note on OPay/PayCom

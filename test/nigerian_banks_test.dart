@@ -79,5 +79,51 @@ void main() {
         );
       });
     });
+
+    group('findBankByName', () {
+      test('finds bank with exact name', () {
+        final bank = nigerianBanks.findBankByName('Access Bank');
+        expect(bank, isNotNull);
+        expect(bank!.slug, 'access-bank');
+      });
+
+      test('finds bank with variations', () {
+        final bank = nigerianBanks.findBankByName('MONIEPOINT');
+        expect(bank, isNotNull);
+        expect(bank!.slug, 'moniepoint-mfb-ng');
+      });
+
+      test('returns null for unrecognized name', () {
+        final bank = nigerianBanks.findBankByName('Totally Fake Bank XYZ');
+        expect(bank, isNull);
+      });
+    });
+
+    group('searchBanks', () {
+      test('searches by partial name', () {
+        final results = nigerianBanks.searchBanks('access');
+        expect(results, isNotEmpty);
+        expect(results.any((b) => b.slug == 'access-bank'), isTrue);
+      });
+
+      test('searches by code', () {
+        final results = nigerianBanks.searchBanks('044');
+        expect(results, isNotEmpty);
+        expect(results.first.slug, 'access-bank');
+      });
+
+      test('returns empty for no matches', () {
+        final results = nigerianBanks.searchBanks('xyznonexistent123');
+        expect(results, isEmpty);
+      });
+    });
+
+    group('normalizeName', () {
+      test('normalizes bank names correctly', () {
+        expect(NigerianBanks.normalizeName('Access Bank PLC'), 'access');
+        expect(NigerianBanks.normalizeName('MONIEPOINT MFB'), 'moniepoint');
+        expect(NigerianBanks.normalizeName('First Bank of Nigeria'), 'firstof');
+      });
+    });
   });
 }

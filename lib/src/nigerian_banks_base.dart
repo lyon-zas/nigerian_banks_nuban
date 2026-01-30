@@ -74,4 +74,83 @@ class NigerianBanks {
 
     return calculatedCheckDigit == checkDigit;
   }
+
+  /// Normalizes a bank name by removing common suffixes, extra spaces, and converting to lowercase.
+  /// Useful for comparing bank names from different sources.
+  static String normalizeName(String name) {
+    return name
+        .toLowerCase()
+        .replaceAll(RegExp(r'\s+'), ' ')
+        .replaceAll(
+          RegExp(r'\b(bank|mfb|microfinance|plc|limited|ltd|nigeria|ng)\b'),
+          '',
+        )
+        .replaceAll(RegExp(r'[^a-z0-9]'), '')
+        .trim();
+  }
+
+  /// Finds a bank by name using fuzzy matching.
+  /// Handles variations like "MONIE POINT" vs "Moniepoint MFB".
+  /// Returns the best match or null if no reasonable match is found.
+  Bank? findBankByName(String name) {
+    final normalizedInput = normalizeName(name);
+    if (normalizedInput.isEmpty) return null;
+
+    Bank? bestMatch;
+    int bestScore = 0;
+
+    for (final bank in banks) {
+      final normalizedBankName = normalizeName(bank.name);
+
+      // Exact match after normalization
+      if (normalizedBankName == normalizedInput) {
+        return bank;
+      }
+
+      // Check if one contains the other
+      final score = _calculateMatchScore(normalizedInput, normalizedBankName);
+      if (score > bestScore) {
+        bestScore = score;
+        bestMatch = bank;
+      }
+    }
+
+    // Only return if we have a reasonable match (at least 50% similarity)
+    return bestScore >= 50 ? bestMatch : null;
+  }
+
+  /// Calculates a match score between two normalized strings.
+  int _calculateMatchScore(String input, String target) {
+    if (input == target) return 100;
+    if (target.contains(input) || input.contains(target)) {
+      final shorter = input.length < target.length ? input : target;
+      final longer = input.length >= target.length ? input : target;
+      return (shorter.length / longer.length * 100).round();
+    }
+
+    // Simple character overlap scoring
+    int matches = 0;
+    for (int i = 0; i < input.length && i < target.length; i++) {
+      if (input[i] == target[i]) matches++;
+    }
+    return (matches /
+            (input.length > target.length ? input.length : target.length) *
+            100)
+        .round();
+  }
+
+  /// Searches banks by name, slug, or code.
+  /// Returns a list of banks matching the query (case-insensitive).
+  List<Bank> searchBanks(String query) {
+    if (query.isEmpty) return [];
+
+    final normalizedQuery = query.toLowerCase().trim();
+
+    return banks.where((bank) {
+      return bank.name.toLowerCase().contains(normalizedQuery) ||
+          bank.slug.toLowerCase().contains(normalizedQuery) ||
+          bank.code.toLowerCase().contains(normalizedQuery) ||
+          normalizeName(bank.name).contains(normalizeName(query));
+    }).toList();
+  }
 }
