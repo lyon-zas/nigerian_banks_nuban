@@ -18,7 +18,7 @@ Add the dependency to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  nigerian_banks_nuban: ^0.0.1
+  nigerian_banks_nuban: ^0.0.3
 ```
 
 ## Usage
