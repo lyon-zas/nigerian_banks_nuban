@@ -1,4 +1,4 @@
-# Nigerian Banks
+# Nigerian Banks NUBAN
 
 A Flutter package that lists all Nigerian banks, their logos, and slugs, and provides functionality to detect probable banks from a NUBAN account number.
 
@@ -15,8 +15,7 @@ Add the dependency to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  nigerian_banks_nuban:
-    path: ./ # Or git url
+  nigerian_banks_nuban: ^0.0.1
 ```
 
 ## Usage
